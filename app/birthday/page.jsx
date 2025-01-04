@@ -4,7 +4,7 @@ import balon from "../../assets/rb_27086.png"
 import Image from 'next/image';
 // import balloonImg from '../../assets/Balloon-border.png';
 import cakeImg from '../../assets/cake.gif';
-import birthdaySong from '../../public/music.mp3';
+import birthdaySong from '../../public/birthday-song.mp3';
 import star from "../../assets/star.png"
 import img1 from "../../assets/WhatsApp Image 2025-01-03 at 22.30.23_690ddd2a.jpg"
 import img2 from "../../assets/ven2.jpg"
@@ -361,7 +361,7 @@ const CountdownSection = () => {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
             >
-              Countdown to the Birthday 5th January 🎉
+              Countdown to the Birthday Girl Venerita 🎉
             </motion.h2>
             <div className="mt-10 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-5 justify-center">
               {Object.entries(timeLeft).map(([unit, value]) => (
