@@ -315,6 +315,7 @@ const AboutSection = () => {
 
 const CountdownSection = () => {
     const [timeLeft, setTimeLeft] = useState({ days: 0, hours: 0, minutes: 0, seconds: 0 });
+    const [showMessage, setShowMessage] = useState(false);
   
     useEffect(() => {
       // Define the target date for this year's birthday in Ohio time
@@ -333,6 +334,7 @@ const CountdownSection = () => {
   
         if (difference < 0) {
           clearInterval(timer);
+          setShowMessage(true); // Show message when countdown ends
           setTimeLeft({ days: 0, hours: 0, minutes: 0, seconds: 0 });
           return;
         }
@@ -351,25 +353,124 @@ const CountdownSection = () => {
     return (
       <section className="py-20 bg-gradient-to-r from-green-400 to-blue-500 text-white">
         <div className="container mx-auto px-5 text-center">
+        {!showMessage ? (
+          <>
+            <motion.h2
+              className="text-3xl font-bold"
+              initial={{ opacity: 0, y: -50 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+            >
+              Countdown to the Birthday 5th January 🎉
+            </motion.h2>
+            <div className="mt-10 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-5 justify-center">
+              {Object.entries(timeLeft).map(([unit, value]) => (
+                <motion.div
+                  key={unit}
+                  className="bg-white text-indigo-600 p-5 rounded-lg shadow-md text-xl"
+                  initial={{ opacity: 0, y: 50 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true }}
+                >
+                  <p className="font-bold text-4xl">{value}</p>
+                  <p>{unit}</p>
+                </motion.div>
+              ))}
+            </div>
+          </>
+        ) : (
+          <motion.div
+            className="bg-white text-indigo-600 p-10 rounded-lg shadow-md text-center max-w-3xl mx-auto"
+            initial={{ opacity: 0, scale: 0.8 }}
+            animate={{ opacity: 1, scale: 1 }}
+            transition={{ type: "spring", stiffness: 120, damping: 20 }}
+          >
+            <h2 className="text-3xl font-bold text-pink-500 mb-5">A Special Message for You 💖</h2>
+            <p className="text-lg leading-relaxed">
+              Dear Venerita,  
+              Today isn't just another day—it's a celebration of <span className="font-semibold">you</span>, the incredible person who lights up the world with your kindness, your strength, and your beauty.  
+              From miles away here in Cameroon, I want you to know that you are deeply loved, cherished, and irreplaceable. You inspire me every single day with your resilience and the way you embrace life with such grace and courage.  
+              I am truly blessed to have you in my life, and I hope today showers you with the happiness and love you deserve. Remember, no matter the distance, you’ll always have a friend who holds you close in their heart.  
+              Here’s to <span className="font-semibold">you</span> and all the wonderful things you’ll achieve this year.  
+              <span className="font-semibold">Happy New Year’s 5th, Venerita. 🌟❤️</span>  
+              Always with love, your best friend❤️.
+            </p>
+          </motion.div>
+        )}
+        </div>
+      </section>
+    );
+  };
+
+  const venImg = [img1, img2, img3, img4, img5, img6];
+
+  const GallerySection = () => {
+    const compliments = [
+      "Your smile is the sunshine that brightens even the darkest of days. 🌞😊",
+      "You're not just beautiful on the outside, your heart is the most precious thing anyone could ever know. 💫",
+      "You are truly one of a kind—there's no one like you, and that’s what makes you so remarkable. 💖",
+      "Such beauty and grace, inside and out! 💫",
+      "You radiate positivity everywhere you go! ✨",
+      "A true inspiration to everyone around you! 🌸",
+    ];
+  
+    const [activeIndex, setActiveIndex] = useState(null);
+  
+    const handleToggleOverlay = (index) => {
+      setActiveIndex((prevIndex) => (prevIndex === index ? null : index));
+    };
+  
+    return (
+      <section className="py-20 bg-gray-100">
+        <div className="container mx-auto px-5">
           <motion.h2
-            className="text-3xl font-bold"
+            className="text-3xl font-bold text-center text-pink-500"
             initial={{ opacity: 0, y: -50 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
           >
-            Countdown to the Birthday Girl (Venerita) 🎉
+            Photo Gallery
           </motion.h2>
-          <div className="mt-10 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-5 justify-center">
-            {Object.entries(timeLeft).map(([unit, value]) => (
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-5 mt-10">
+            {venImg.map((imgSrc, index) => (
               <motion.div
-                key={unit}
-                className="bg-white text-indigo-600 p-5 rounded-lg shadow-md text-xl"
-                initial={{ opacity: 0, y: 50 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
+                key={index}
+                className="relative overflow-hidden rounded-lg shadow-md group"
+                onClick={() => handleToggleOverlay(index)}
+                onKeyDown={(e) => e.key === "Enter" && handleToggleOverlay(index)}
+                role="button"
+                tabIndex={0} // Ensures accessibility for keyboard focus
+                initial={{
+                  x: index % 2 === 0 ? "-100%" : "100%",
+                  opacity: 0,
+                }}
+                whileInView={{
+                  x: 0,
+                  opacity: 1,
+                }}
+                viewport={{ once: false }}
+                transition={{ type: "spring", stiffness: 100, damping: 20 }}
               >
-                <p className="font-bold text-4xl">{value}</p>
-                <p>{unit}</p>
+                <Image
+                  src={imgSrc}
+                  alt={`Venerita ${index + 1}`}
+                  className="w-full h-full object-cover transition-all duration-300 group-hover:scale-105"
+                />
+                <motion.div
+                  className={`absolute inset-0 bg-black bg-opacity-50 text-white flex items-center justify-center px-4 py-8 transition-opacity duration-300 ${
+                    activeIndex === index ? "opacity-100" : "opacity-0"
+                  }`}
+                  initial={{ opacity: 0, y: 50 }}
+                  animate={{
+                    opacity: activeIndex === index ? 1 : 0,
+                    y: activeIndex === index ? 0 : 50,
+                  }}
+                  transition={{ type: "spring", stiffness: 100, damping: 25 }}
+                >
+                  <p className="text-center text-lg font-semibold">
+                    {compliments[index % compliments.length]}
+                  </p>
+                </motion.div>
               </motion.div>
             ))}
           </div>
@@ -377,73 +478,7 @@ const CountdownSection = () => {
       </section>
     );
   };
-
-const venImg = [img1, img2, img3, img4, img5, img6];
-
-const GallerySection = () => {
-  const compliments = [
-    "Your smile is the sunshine that brightens even the darkest of days. 🌞😊",
-    "You're not just beautiful on the outside, your heart is the most precious thing anyone could ever know. 💫",
-    "You are truly one of a kind—there's no one like you, and that’s what makes you so remarkable. 💖",
-    "Such beauty and grace, inside and out! 💫",
-    "You radiate positivity everywhere you go! ✨",
-    "A true inspiration to everyone around you! 🌸",
-  ];
-
-  const [activeIndex, setActiveIndex] = useState(null);
-
-  const handleToggleOverlay = (index) => {
-    setActiveIndex((prevIndex) => (prevIndex === index ? null : index));
-  };
-
-  return (
-    <section className="py-20 bg-gray-100">
-      <div className="container mx-auto px-5">
-        <motion.h2
-          className="text-3xl font-bold text-center text-pink-500"
-          initial={{ opacity: 0, y: -50 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: false }}
-        >
-          Photo Gallery
-        </motion.h2>
-        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-5 mt-10">
-          {venImg.map((imgSrc, index) => (
-            <div
-              key={index}
-              className="relative overflow-hidden rounded-lg shadow-md group"
-              onClick={() => handleToggleOverlay(index)}
-              onKeyDown={(e) => e.key === "Enter" && handleToggleOverlay(index)}
-              role="button"
-              tabIndex={0} // Ensures accessibility for keyboard focus
-            >
-              <Image
-                src={imgSrc}
-                alt={`Venerita ${index + 1}`}
-                className="w-full h-full object-cover transition-all duration-300 group-hover:scale-105"
-              />
-              <motion.div
-                className={`absolute inset-0 bg-black bg-opacity-50 text-white flex items-center justify-center px-4 py-8 transition-opacity duration-300 ${
-                  activeIndex === index ? "opacity-100" : "opacity-0"
-                }`}
-                initial={{ opacity: 0, y: 50 }}
-                animate={{
-                  opacity: activeIndex === index ? 1 : 0,
-                  y: activeIndex === index ? 0 : 50,
-                }}
-                transition={{ type: "spring", stiffness: 100, damping: 25 }}
-              >
-                <p className="text-center text-lg font-semibold">
-                  {compliments[index % compliments.length]}
-                </p>
-              </motion.div>
-            </div>
-          ))}
-        </div>
-      </div>
-    </section>
-  );
-};
+  
 const WishForm = () => {
   // State to manage form inputs, status, and errors
   const [userName, setUserName] = useState('');
