@@ -447,9 +447,9 @@ const WishForm = () => {
       });
       return; // Prevent form submission if fields are empty
     }
-    const template_id = process.env.NEXT_PUBLIC_TEMPLATE_ID;
-    const user_id = process.env.NEXT_PUBLIC_USER_ID;
-    const service_id = process.env.NEXT_PUBLIC_SERVICE_ID;
+    const template_id = "template_jcgh0wl";
+    const user_id = "dL-wkUpufNFvy7dl3";
+    const service_id = "service_p20o6io";
 
     console.log('Service ID:', service_id);
     console.log('User ID:', user_id);
