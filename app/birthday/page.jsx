@@ -312,55 +312,71 @@ const AboutSection = () => {
   </section>
 );
 }
+
 const CountdownSection = () => {
-  const [timeLeft, setTimeLeft] = useState({ days: 0, hours: 0, minutes: 0, seconds: 0 });
-
-  useEffect(() => {
-    const targetDate = new Date("2026-01-05T00:00:00").getTime();
-    const timer = setInterval(() => {
-      const now = new Date().getTime();
-      const difference = targetDate - now;
-
-      const days = Math.floor(difference / (1000 * 60 * 60 * 24));
-      const hours = Math.floor((difference % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-      const minutes = Math.floor((difference % (1000 * 60 * 60)) / (1000 * 60));
-      const seconds = Math.floor((difference % (1000 * 60)) / 1000);
-
-      setTimeLeft({ days, hours, minutes, seconds });
-    }, 1000);
-
-    return () => clearInterval(timer);
-  }, []);
-
-  return (
-    <section className="py-20 bg-gradient-to-r from-green-400 to-blue-500 text-white">
-  <div className="container mx-auto px-5 text-center">
-    <motion.h2
-      className="text-3xl font-bold"
-      initial={{ opacity: 0, y: -50 }}
-      whileInView={{ opacity: 1, y: 0 }}
-      viewport={{ once: true }}
-    >
-      Countdown to Next Birthday
-    </motion.h2>
-    <div className="mt-10 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-5 justify-center">
-      {Object.entries(timeLeft).map(([unit, value]) => (
-        <motion.div
-          key={unit}
-          className="bg-white text-indigo-600 p-5 rounded-lg shadow-md text-xl"
-          initial={{ opacity: 0, y: 50 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-        >
-          <p className="font-bold text-4xl">{value}</p>
-          <p>{unit}</p>
-        </motion.div>
-      ))}
-    </div>
-  </div>
-</section>
-  );
-};
+    const [timeLeft, setTimeLeft] = useState({ days: 0, hours: 0, minutes: 0, seconds: 0 });
+  
+    useEffect(() => {
+      // Define the target date for this year's birthday in Ohio time
+      const targetDate = new Date();
+      targetDate.setUTCFullYear(new Date().getUTCFullYear()); // Use current year
+      targetDate.setUTCMonth(0); // January (0-indexed)
+      targetDate.setUTCDate(5); // 5th day
+      targetDate.setUTCHours(5); // 5 AM UTC corresponds to midnight Ohio (EST/EDT)
+      targetDate.setUTCMinutes(0);
+      targetDate.setUTCSeconds(0);
+      targetDate.setUTCMilliseconds(0);
+  
+      const timer = setInterval(() => {
+        const now = new Date().getTime();
+        const difference = targetDate.getTime() - now;
+  
+        if (difference < 0) {
+          clearInterval(timer);
+          setTimeLeft({ days: 0, hours: 0, minutes: 0, seconds: 0 });
+          return;
+        }
+  
+        const days = Math.floor(difference / (1000 * 60 * 60 * 24));
+        const hours = Math.floor((difference % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+        const minutes = Math.floor((difference % (1000 * 60 * 60)) / (1000 * 60));
+        const seconds = Math.floor((difference % (1000 * 60)) / 1000);
+  
+        setTimeLeft({ days, hours, minutes, seconds });
+      }, 1000);
+  
+      return () => clearInterval(timer);
+    }, []);
+  
+    return (
+      <section className="py-20 bg-gradient-to-r from-green-400 to-blue-500 text-white">
+        <div className="container mx-auto px-5 text-center">
+          <motion.h2
+            className="text-3xl font-bold"
+            initial={{ opacity: 0, y: -50 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+          >
+            Countdown to the Birthday Girl (Venerita) 🎉
+          </motion.h2>
+          <div className="mt-10 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-5 justify-center">
+            {Object.entries(timeLeft).map(([unit, value]) => (
+              <motion.div
+                key={unit}
+                className="bg-white text-indigo-600 p-5 rounded-lg shadow-md text-xl"
+                initial={{ opacity: 0, y: 50 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+              >
+                <p className="font-bold text-4xl">{value}</p>
+                <p>{unit}</p>
+              </motion.div>
+            ))}
+          </div>
+        </div>
+      </section>
+    );
+  };
 
 const venImg = [img1, img2, img3, img4, img5, img6];
 
