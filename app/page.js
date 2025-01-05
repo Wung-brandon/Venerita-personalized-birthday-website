@@ -722,16 +722,18 @@ export default function Home() {
       );
     }
   
-    // Homepage sections
-    return (
-      <div>
-        <HeroSection />
-        <AboutSection />
-        <CountdownSection />
-        <GallerySection />
-        <LongWishSection />
-        <WishForm />
-        <Footer />
-      </div>
-    );
+   // Homepage sections
+return (
+  <div className="overflow-x-hidden w-full">
+    <div className="w-full ">
+      <HeroSection />
+      <AboutSection />
+      <CountdownSection />
+      <GallerySection />
+      <LongWishSection />
+      <WishForm />
+      <Footer />
+    </div>
+  </div>
+);
   }
